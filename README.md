@@ -28,8 +28,8 @@
 </p>
 
 <p align="center">
-  <a href="https://x.com/YetAnotherLeo"><img src="docs/assets/badges/follow-x.svg" alt="Follow @YetAnotherLeo on X / Twitter" /></a>
-  <a href="https://xhslink.com/m/18bjTTf180W"><img src="docs/assets/badges/follow-xiaohongshu.svg" alt="Follow 里奥YetAnotherLeo on Xiaohongshu" /></a>
+  <a href="https://x.com/ItsOdeLeo"><img src="docs/assets/badges/follow-x.svg" alt="Follow 欧的Leo (@ItsOdeLeo) on X / Twitter" /></a>
+  <a href="https://xhslink.com/m/18bjTTf180W"><img src="docs/assets/badges/follow-xiaohongshu.svg" alt="Follow 欧的Leo on Xiaohongshu, ID: ItsOdeLeo" /></a>
 </p>
 
 <p align="center"><strong>English</strong> · <a href="README.zh-CN.md">简体中文</a></p>
@@ -280,18 +280,11 @@ Real-model tests require explicitly selected local weights. Run model workloads 
 
 Share use cases, reproduction results, and suggestions. Issues, documentation fixes, and new public test cases also support the project.
 
-<p align="center"><strong>YetAnotherLeo</strong></p>
+<p align="center"><strong>欧的Leo</strong></p>
 
-<p align="center"><a href="https://x.com/YetAnotherLeo">X / Twitter · @YetAnotherLeo ↗</a> · <a href="https://xhslink.com/m/18bjTTf180W">Xiaohongshu · 里奥YetAnotherLeo ↗</a></p>
+<p align="center"><a href="https://x.com/ItsOdeLeo">X / Twitter · @ItsOdeLeo ↗</a> · <a href="https://xhslink.com/m/18bjTTf180W">Xiaohongshu · 欧的Leo ↗</a></p>
 
-<details>
-<summary><strong>Scan the Xiaohongshu profile card</strong></summary>
-
-<p align="center"><img src="docs/assets/social/xiaohongshu-profile.jpg" alt="Xiaohongshu profile card for 里奥YetAnotherLeo" width="320" /></p>
-
-Scan the profile QR to follow on Xiaohongshu.
-
-</details>
+<p align="center">Xiaohongshu ID: <code>ItsOdeLeo</code></p>
 
 <p align="center"><sub>Support the project with a star, a share, or a pull request.</sub></p>
 

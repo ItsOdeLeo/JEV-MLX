@@ -33,4 +33,4 @@
 
 语言只在主页选择：`README.md` 是默认英文首页，`README.zh-CN.md` 是中文首页。分别进入完整的同语言文档路径，内页不再提供语言切换。相对链接在 GitHub 上无需 JavaScript 即可使用。所有新视觉素材为本项目原创 SVG。
 
-公开社交和赞助链接使用作者提供的地址。小红书名片属于里奥YetAnotherLeo（小红书号 `6236648830`），图片原样保留。作者于 2026-09-20 将 X 更新为 [@YetAnotherLeo](https://x.com/YetAnotherLeo)，[社交资料来源](assets/social/README.zh-CN.md)保留了历史记录。赞助入口仍未配置，没有编造支付链接。
+公开社交链接使用作者提供的账号信息。2026-10-08，作者将显示名称更新为**欧的Leo**，小红书号和 X 账号均更新为 **ItsOdeLeo**。README 和关注徽章使用 [X 上的 @ItsOdeLeo](https://x.com/ItsOdeLeo)，以及原有的[小红书主页链接](https://xhslink.com/m/18bjTTf180W)。旧名片印有过时账号信息，因此不再展示在首页；[社交资料来源](assets/social/README.zh-CN.md)保留了历史记录。赞助入口仍未配置。

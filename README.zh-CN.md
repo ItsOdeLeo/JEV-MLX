@@ -28,8 +28,8 @@
 </p>
 
 <p align="center">
-  <a href="https://x.com/YetAnotherLeo"><img src="docs/assets/badges/follow-x.svg" alt="关注 X / Twitter：@YetAnotherLeo" /></a>
-  <a href="https://xhslink.com/m/18bjTTf180W"><img src="docs/assets/badges/follow-xiaohongshu.svg" alt="关注小红书：里奥YetAnotherLeo" /></a>
+  <a href="https://x.com/ItsOdeLeo"><img src="docs/assets/badges/follow-x.svg" alt="关注 X / Twitter：欧的Leo（@ItsOdeLeo）" /></a>
+  <a href="https://xhslink.com/m/18bjTTf180W"><img src="docs/assets/badges/follow-xiaohongshu.svg" alt="关注小红书：欧的Leo，小红书号 ItsOdeLeo" /></a>
 </p>
 
 <p align="center"><a href="README.md">English</a> · <strong>简体中文</strong></p>
@@ -280,18 +280,11 @@ python -m ruff check src tests benchmarks scripts examples
 
 欢迎分享使用场景、复现结果和改进建议。你也可以通过提交 issue、修正文档或提供新的公开测试场景支持项目。
 
-<p align="center"><strong>里奥YetAnotherLeo</strong></p>
+<p align="center"><strong>欧的Leo</strong></p>
 
-<p align="center"><a href="https://x.com/YetAnotherLeo">X / Twitter · @YetAnotherLeo ↗</a> · <a href="https://xhslink.com/m/18bjTTf180W">小红书 · 里奥YetAnotherLeo ↗</a></p>
+<p align="center"><a href="https://x.com/ItsOdeLeo">X / Twitter · @ItsOdeLeo ↗</a> · <a href="https://xhslink.com/m/18bjTTf180W">小红书 · 欧的Leo ↗</a></p>
 
-<details>
-<summary><strong>扫码关注小红书</strong></summary>
-
-<p align="center"><img src="docs/assets/social/xiaohongshu-profile.jpg" alt="里奥YetAnotherLeo的小红书名片" width="320" /></p>
-
-扫描名片上的二维码，在小红书找到我。
-
-</details>
+<p align="center">小红书号：<code>ItsOdeLeo</code></p>
 
 <p align="center"><sub>欢迎 Star、分享或提交 PR，一起改进本地语义决策。</sub></p>
 
