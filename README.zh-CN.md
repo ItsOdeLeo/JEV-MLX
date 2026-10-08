@@ -4,9 +4,11 @@
   <img src="docs/assets/jev-mlx-hero.zh-CN.svg" alt="JEV MLX — 受 JEV 启发，基于 MLX 的本地语义决策" width="1280" />
 </p>
 
-<p align="center"><strong>当前状态 + 一句话 → 一个允许的选择。</strong><br />在 Apple Silicon 上进行本地大模型推理与语义路由。</p>
+<p align="center"><strong>当前状态 + 一句话 → 一个允许的选择。</strong><br />复用已有 MLX 模型，无需额外训练。</p>
 
 **JEV MLX** 是面向 Apple Silicon Mac 的开源 Python 库，使用 [MLX](https://github.com/ml-explore/mlx) 和 [MLX-LM](https://github.com/ml-explore/mlx-lm) 进行本地大模型（local LLM）动作选择。它根据应用状态和自然语言请求，从应用允许的动作中选出一个，或返回 `no_match` / `abstain`。你可以通过 Python API、CLI 或本地 HTTP 服务接入语义路由（semantic routing）、enum / boolean 决策和自然语言应用控制。
+
+**复用你已有的兼容 MLX-LM 检查点，无需额外训练、微调或专用决策权重。** 模型照常处理提示词，JEV MLX 从原始输出头读取最后一个输入位置的候选 logits。模型权重和输出头保持不变，直接决策无需生成后续文本。
 
 <p align="center">
   <img src="docs/assets/badges/apple-silicon.svg" alt="Apple Silicon" />
@@ -198,7 +200,7 @@ Qwen 在原始集的 3 个未通过场景包括拒绝状态区分和排序后的
 
 ## 相关决策项目：OpenDecider 与 Laya
 
-正在评估 **OpenDecider**、**Laya** 或 **Laya-MLX** 的开发者，也可能需要本地动作选择、分类或语义路由。JEV MLX 使用已有的因果 MLX-LM 检查点和应用定义的候选项来处理这些场景。
+正在评估 **OpenDecider**、**Laya** 或 **Laya-MLX** 的开发者，也可能需要本地动作选择、分类或语义路由。**JEV MLX 的核心区别是复用已有兼容的因果 MLX-LM 检查点，无需额外训练或单独的决策模型权重。** 应用定义候选项，通过原模型输出头为其评分。
 
 | 项目 | 文档中的实现方向 | 与 JEV MLX 的技术联系 |
 | :--- | :--- | :--- |
@@ -216,13 +218,15 @@ Qwen 在原始集的 3 个未通过场景包括拒绝状态区分和排序后的
 
 MLX 提供数组与计算框架，MLX-LM 加载并运行本地语言模型。JEV MLX 在此基础上提供应用定义的候选项、候选评分、拒绝结果和版本化执行。直接决策读取经过验证的单 token 选项编码对应的下一 token logits，不生成 JSON 续写。实现细节见[架构](docs/architecture.zh-CN.md)。
 
+完整模型仍然处理输入。读取最后位置的 logits，不代表只运行最后一层或替换输出头。
+
 ### JEV MLX 可以用于本地语义路由吗？
 
 可以。把当前允许的路由或动作描述为带稳定业务 ID 的候选项，提供应用状态和用户请求，然后读取选中的 ID。动作由宿主应用定义和执行；不合适或含糊的请求可以返回 `no_match` 或 `abstain`。接入方法见 [Python API](docs/python-api.zh-CN.md)。
 
 ### JEV MLX 与 OpenDecider、Laya-MLX 有什么区别？
 
-它们面向相关的带类型决策场景。JEV MLX 为已有因果 MLX-LM 检查点增加有限候选动作选择；OpenDecider 提供自己的决策模型系列，Laya-MLX 运行 Laya 的编码器模型。各自的 API 和分数含义不同，JEV MLX 尚未进行三者之间的基准对比。详见[决策模型对照](docs/decision-models.zh-CN.md)。
+JEV MLX 为已有兼容的因果 MLX-LM 检查点增加有限候选动作选择，无需额外训练或专用决策权重。OpenDecider 与 Laya 发布训练好的决策模型系列，Laya-MLX 运行 Laya 权重；它们的用户可以直接加载已发布检查点，不必亲自训练。主要区别在于需要使用哪套权重，API 和分数含义也不同。详见[决策模型对照](docs/decision-models.zh-CN.md)。
 
 ### 已经评测了哪些 MLX 模型？
 
@@ -230,7 +234,7 @@ MLX 提供数组与计算框架，MLX-LM 加载并运行本地语言模型。JEV
 
 ### 推理需要云端 API 或重新训练模型吗？
 
-推理使用已有 MLX-LM 检查点，在 Apple Silicon Mac 上本地运行，不需要云端 API 或新模型训练。模型权重需要单独获取，再把本地目录传给引擎；软件包不负责下载权重。
+推理使用已有兼容的 MLX-LM 检查点，在 Apple Silicon Mac 上本地运行，无需云端 API、额外训练、微调、新决策头或专用决策检查点。已有兼容基础权重时可以直接复用；否则需要先单独获取基础权重，再把本地目录传给引擎。软件包不负责下载权重。
 
 ### 如何安装 JEV MLX？
 

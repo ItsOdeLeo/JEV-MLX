@@ -12,11 +12,34 @@ The related projects below are separate implementations. Links describe technica
 similarities and alternatives; they do not establish vendor affiliations or
 checkpoint compatibility.
 
+## Reuse existing weights without additional training
+
+**JEV MLX adds decision scoring to a compatible MLX-LM checkpoint without training
+or fine-tuning it, adding a decision head or adapter, or requiring separate
+decision-model weights.** If compatible base weights are already available locally,
+reuse them. Otherwise obtain the base checkpoint first; the backend loads a local
+directory and does not download weights.
+
+The full model processes the prompt, with valid prefix-cache reuse where available.
+Its unchanged output head produces next-token logits at the final input position.
+JEV MLX selects the logits for tokenizer-verified option codes and maps the result
+to a business ID. This removes the need for a generated continuation; it does not
+reduce inference to running only the final layer. See the [model path](architecture.md)
+and [published scoring implementation](../src/jev_mlx/backends/mlx_lm.py).
+
+[OpenDecider](https://github.com/manjunathshiva/opendecider/blob/b830ea46961105da8c30e30a5f11ccce211bbf43/README.md)
+and [Laya](https://github.com/NandhaKishorM/laya/blob/3cf26cbcb18725dbc2d127bb8bb2c4c43243ae63/README.md)
+publish trained decision-model checkpoints; Laya-MLX retains Laya's pretrained
+weights. Their users can load published weights without training them themselves.
+The distinction is **reusing existing compatible base-model weights versus loading
+a dedicated decision-model checkpoint**, not a requirement that other users train
+their own models.
+
 ## Implementation comparison
 
 | Project | Model and runtime approach | Integration distinction |
 | :--- | :--- | :--- |
-| **JEV MLX** | Existing causal MLX-LM checkpoints on Apple Silicon; score verified option-token logits. | Dynamic candidates with stable business IDs, `no_match` / `abstain`, state versions, and single-use execution authorization. |
+| **JEV MLX** | Reuse existing compatible causal MLX-LM weights on Apple Silicon; read original option-token logits with no extra training. | Dynamic candidates with stable business IDs, `no_match` / `abstain`, state versions, and single-use execution authorization. |
 | [OpenDecider](https://github.com/manjunathshiva/opendecider/blob/b830ea46961105da8c30e30a5f11ccce211bbf43/README.md) | Open-weight System 1 decision-model families, including encoder and decoder approaches. | Its own typed question contracts, serving clients, and model-specific runtimes. |
 | [Laya](https://github.com/NandhaKishorM/laya/blob/3cf26cbcb18725dbc2d127bb8bb2c4c43243ae63/README.md) · Convai Innovations | Encoder-based decision models with choice, ordered-score, and yes/no outputs. | Its own question schema, decision heads, and checkpoint routing. |
 | [Laya-MLX](https://github.com/mizorewww/laya-mlx/blob/ca5940aa9286dbbdfaacbecbdb7b337295ad36a2/README.md) | Independent MLX implementation of Laya's encoder and decision heads. | Local Apple Silicon inference for Laya checkpoints; a separate API from JEV MLX. |

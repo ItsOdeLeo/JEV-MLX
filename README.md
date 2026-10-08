@@ -4,9 +4,11 @@
   <img src="docs/assets/jev-mlx-hero.en.svg" alt="JEV MLX — JEV-inspired local decisions, powered by MLX" width="1280" />
 </p>
 
-<p align="center"><strong>Current state + a sentence → one allowed choice.</strong><br />Local LLM inference and semantic routing on Apple Silicon.</p>
+<p align="center"><strong>Current state + a sentence → one allowed choice.</strong><br />Reuse an existing MLX model. No additional training.</p>
 
 **JEV MLX** is an open-source Python library for local LLM action selection on Apple Silicon Macs, built with [MLX](https://github.com/ml-explore/mlx) and [MLX-LM](https://github.com/ml-explore/mlx-lm). It maps application state and a natural-language request to one of your allowed actions, or returns `no_match` / `abstain`. Use it for semantic routing, enum / boolean decisions, and language-driven application controls through a Python API, CLI, or local HTTP server.
+
+**Use a compatible MLX-LM checkpoint you already have: no extra training, fine-tuning, or decision-specific weights.** The model processes the prompt normally; JEV MLX reads candidate logits at the final input position from its original output head. The weights and output head remain unchanged, and direct decisions require no generated continuation.
 
 <p align="center">
   <img src="docs/assets/badges/apple-silicon.svg" alt="Apple Silicon" />
@@ -198,7 +200,7 @@ See the [architecture](docs/architecture.md) and [framework audit](docs/framewor
 
 ## Related decision projects: OpenDecider and Laya
 
-Developers evaluating **OpenDecider**, **Laya**, or **Laya-MLX** may also be looking for local action selection, classification, or semantic routing. JEV MLX addresses those use cases with existing causal MLX-LM checkpoints and application-defined choices.
+Developers evaluating **OpenDecider**, **Laya**, or **Laya-MLX** may also be looking for local action selection, classification, or semantic routing. **JEV MLX's main distinction is reusing an existing compatible causal MLX-LM checkpoint without extra training or separate decision-model weights.** Application-defined choices are scored through the original model output head.
 
 | Project | Documented approach | Relationship to JEV MLX |
 | :--- | :--- | :--- |
@@ -216,13 +218,15 @@ Read the [JEV MLX, OpenDecider, and Laya comparison](docs/decision-models.md) fo
 
 MLX provides the array and compute framework; MLX-LM loads and runs the local language model. JEV MLX adds application-supplied choices, candidate scoring, rejection outcomes, and versioned execution. Direct decisions read next-token logits for verified single-token option codes without generating a JSON continuation. See the [architecture](docs/architecture.md).
 
+The full model still processes the input. Reading final-position logits does not mean running only the final layer or replacing the output head.
+
 ### Can I use JEV MLX as a local semantic router?
 
 Yes. Describe the currently allowed routes or actions as candidates with stable business IDs, supply the application state and user request, and inspect the selected ID. The host application defines and executes the actions. `no_match` and `abstain` handle unsuitable or ambiguous requests. See the [Python API](docs/python-api.md).
 
 ### How does JEV MLX compare with OpenDecider and Laya-MLX?
 
-They share typed-decision use cases, but JEV MLX adds bounded action selection to existing causal MLX-LM checkpoints. OpenDecider provides its own decision-model families; Laya-MLX runs Laya's encoder-based models. Their APIs and score semantics differ, and JEV MLX has not benchmarked them against each other. See the [decision-model comparison](docs/decision-models.md).
+JEV MLX adds bounded action selection to existing compatible causal MLX-LM checkpoints without extra training or decision-specific weights. OpenDecider and Laya publish trained decision-model families, and Laya-MLX runs Laya weights. Their users can load published checkpoints without training them themselves. The distinction is which weights are required; APIs and score semantics also differ. See the [decision-model comparison](docs/decision-models.md).
 
 ### Which MLX models have been evaluated?
 
@@ -230,7 +234,7 @@ Recorded local checkpoints include Qwen3.5-9B-OptiQ-4bit, GLM-4.7-Flash-4bit, an
 
 ### Does inference require a cloud API or model training?
 
-Inference runs locally on an Apple Silicon Mac with an existing MLX-LM checkpoint. No cloud API or new model training is required. Obtain the model weights separately and pass their local directory to the engine; the package does not download weights.
+Inference runs locally on an Apple Silicon Mac with an existing compatible MLX-LM checkpoint. No cloud API, extra training, fine-tuning, new decision head, or decision-specific checkpoint is required. If you already have compatible base weights, reuse them. Otherwise obtain those base weights separately and pass their local directory to the engine; the package does not download weights.
 
 ### How do I install JEV MLX?
 
