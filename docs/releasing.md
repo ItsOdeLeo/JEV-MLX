@@ -9,7 +9,7 @@ publish it. The local project directory
 does not reserve a package name, and installation examples currently use the
 source checkout or local wheel rather than PyPI.
 
-The current source repository is [CoderInPajamas/JEV-MLX](https://github.com/CoderInPajamas/JEV-MLX).
+The current source repository is [ItsOdeLeo/JEV-MLX](https://github.com/ItsOdeLeo/JEV-MLX).
 Its checkout directory is `JEV-MLX`; the distribution, CLI, and import names above
 are unchanged. A repository rename does not publish a package to a registry.
 

@@ -2,7 +2,7 @@
 
 [返回项目首页](../README.zh-CN.md)
 
-项目名称为 **JEV MLX**，仓库为 [CoderInPajamas/JEV-MLX](https://github.com/CoderInPajamas/JEV-MLX)。名称直接体现 JEV 启发来源和 MLX 运行框架。发行包与命令行为 `jev-mlx`，Python 导入为 `jev_mlx`。
+项目名称为 **JEV MLX**，仓库为 [ItsOdeLeo/JEV-MLX](https://github.com/ItsOdeLeo/JEV-MLX)。名称直接体现 JEV 启发来源和 MLX 运行框架。发行包与命令行为 `jev-mlx`，Python 导入为 `jev_mlx`。
 
 2026-09-20，项目对外名称由 MLXJ 改为 JEV MLX。已有录像和评测记录保留原始名称与文件内容；此次更名不改变发行包、命令行、Python API 或已测模型行为。
 

@@ -1,8 +1,12 @@
+# JEV MLX: local LLM action selection with MLX
+
 <p align="center">
   <img src="docs/assets/jev-mlx-hero.en.svg" alt="JEV MLX — JEV-inspired local decisions, powered by MLX" width="1280" />
 </p>
 
-<p align="center"><strong>Current state + a sentence → one allowed choice.</strong><br />JEV-inspired local decisions for Apple Silicon.</p>
+<p align="center"><strong>Current state + a sentence → one allowed choice.</strong><br />Local LLM inference and semantic routing on Apple Silicon.</p>
+
+**JEV MLX** is an open-source Python library for local LLM action selection on Apple Silicon Macs, built with [MLX](https://github.com/ml-explore/mlx) and [MLX-LM](https://github.com/ml-explore/mlx-lm). It maps application state and a natural-language request to one of your allowed actions, or returns `no_match` / `abstain`. Use it for semantic routing, enum / boolean decisions, and language-driven application controls through a Python API, CLI, or local HTTP server.
 
 <p align="center">
   <img src="docs/assets/badges/apple-silicon.svg" alt="Apple Silicon" />
@@ -15,6 +19,7 @@
   <a href="#quick-start">Quick start</a> ·
   <a href="#blocks">Game demo</a> ·
   <a href="#results">Measured results</a> ·
+  <a href="#faq">FAQ</a> ·
   <a href="docs/evaluation.md">Methodology</a> ·
   <a href="#connect">Connect & support</a>
 </p>
@@ -40,7 +45,7 @@
 
 The first attempt refused to place a piece. Both attempts are retained in the [game report](docs/blocks.md#recorded-development-attempts). After clarifying the game instruction, the second run reached its planned 20-piece limit. Its decision p50 / p95 was **5.78 / 11.57 seconds**; this is an illustrative development run, not a held-out game benchmark or a speed claim. Manual play can run on a static server; new AI decisions require the local MLX backend.
 
-## Connect language to your application
+## MLX action selection and semantic routing
 
 **JEV MLX** uses the current application state, a user utterance, and dynamic allowed choices to select a stable business ID with a local model. No-match and abstention are explicit outcomes.
 
@@ -67,7 +72,7 @@ Requires **Apple Silicon, native ARM Python 3.11+**, and a local MLX-LM checkpoi
 Clone the repository and install:
 
 ```sh
-git clone https://github.com/CoderInPajamas/JEV-MLX.git
+git clone https://github.com/ItsOdeLeo/JEV-MLX.git
 cd JEV-MLX
 python3 -m venv .venv
 source .venv/bin/activate
@@ -187,6 +192,38 @@ Application state + utterance + allowed choices
 Choices map to tokenizer-verified single-token codes, then back to business IDs. Direct scoring reads a causal model's next-token logits without generating a JSON continuation. It retains the official quantized output head. Hybrid caches reuse only complete, valid prefix boundaries.
 
 See the [architecture](docs/architecture.md) and [framework audit](docs/framework-audit.md). Version 0.1 focuses on **English, single-turn, single-step choices**. General chat, multi-step planning, arbitrary arguments, vision, training, and GPU batching are outside its scope. **Chinese documentation does not mean Chinese model behavior has been validated.**
+
+<a name="faq"></a>
+
+## Frequently asked questions
+
+### How does JEV MLX use MLX and MLX-LM?
+
+MLX provides the array and compute framework; MLX-LM loads and runs the local language model. JEV MLX adds application-supplied choices, candidate scoring, rejection outcomes, and versioned execution. Direct decisions read next-token logits for verified single-token option codes without generating a JSON continuation. See the [architecture](docs/architecture.md).
+
+### Can I use JEV MLX as a local semantic router?
+
+Yes. Describe the currently allowed routes or actions as candidates with stable business IDs, supply the application state and user request, and inspect the selected ID. The host application defines and executes the actions. `no_match` and `abstain` handle unsuitable or ambiguous requests. See the [Python API](docs/python-api.md).
+
+### Which MLX models have been evaluated?
+
+Recorded local checkpoints include Qwen3.5-9B-OptiQ-4bit, GLM-4.7-Flash-4bit, and Gemma 4 26B-A4B MoE. All three returned wrong actions in the 36-case extension. Evaluation of these checkpoints does not establish compatibility with every MLX model. Exact revisions, results, and limits are in the [model compatibility guide](docs/models.md).
+
+### Does inference require a cloud API or model training?
+
+Inference runs locally on an Apple Silicon Mac with an existing MLX-LM checkpoint. No cloud API or new model training is required. Obtain the model weights separately and pass their local directory to the engine; the package does not download weights.
+
+### How do I install JEV MLX?
+
+Clone [ItsOdeLeo/JEV-MLX](https://github.com/ItsOdeLeo/JEV-MLX), create a native ARM Python 3.11+ environment, and run `python -m pip install -e '.[mlx]'` from the checkout. Set `JEV_MLX_MODEL` to your local checkpoint directory. Follow the [quick start](#quick-start) for a runnable example. Version 0.1 is experimental and has not been published to PyPI.
+
+### How fast is local MLX action selection?
+
+Latency depends on the checkpoint, hardware, input, and reusable prefix. The [measured results](#results) distinguish loaded weights with a reusable page prefix from startup, cold KV, and page updates. Warm measurements are not a fixed latency guarantee or evidence of reliable unattended execution.
+
+### Is JEV MLX an official JEV implementation or a general chat assistant?
+
+JEV MLX is an independent JEV-inspired project at [ItsOdeLeo/JEV-MLX](https://github.com/ItsOdeLeo/JEV-MLX). It uses existing MLX-LM models, not JEV weights, and does not reproduce unpublished JEV training. Version 0.1 supports English, single-turn, single-step choices; general chat, vision, and multi-step planning are outside its scope.
 
 ## Documentation
 

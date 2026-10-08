@@ -5,13 +5,16 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "jev-mlx"
 version = "0.1.0"
-description = "JEV-inspired local decisions for Apple Silicon."
+description = "Local LLM action selection and semantic routing on Apple Silicon using MLX and MLX-LM."
 readme = "README.md"
 requires-python = ">=3.11"
 license = "MIT"
 license-files = ["LICENSE", "NOTICE.md"]
 authors = [{name = "JEV MLX contributors"}]
-keywords = ["mlx", "local-inference", "apple-silicon", "semantic-decisions"]
+keywords = [
+  "mlx", "mlx-lm", "apple-silicon", "llm", "local-llm",
+  "local-inference", "action-selection", "semantic-routing", "jev",
+]
 classifiers = [
   "Development Status :: 3 - Alpha",
   "Programming Language :: Python :: 3",
@@ -21,9 +24,10 @@ classifiers = [
 dependencies = []
 
 [project.urls]
-Homepage = "https://github.com/CoderInPajamas/JEV-MLX"
-Repository = "https://github.com/CoderInPajamas/JEV-MLX"
-Issues = "https://github.com/CoderInPajamas/JEV-MLX/issues"
+Homepage = "https://github.com/ItsOdeLeo/JEV-MLX"
+Repository = "https://github.com/ItsOdeLeo/JEV-MLX"
+Documentation = "https://github.com/ItsOdeLeo/JEV-MLX#documentation"
+Issues = "https://github.com/ItsOdeLeo/JEV-MLX/issues"
 
 [project.optional-dependencies]
 mlx = ["mlx==0.31.2", "mlx-lm==0.31.3", "transformers==5.9.0", "tokenizers==0.22.2"]

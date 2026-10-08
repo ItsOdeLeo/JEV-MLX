@@ -1,8 +1,12 @@
+# JEV MLX：基于 MLX 的本地大模型动作选择
+
 <p align="center">
   <img src="docs/assets/jev-mlx-hero.zh-CN.svg" alt="JEV MLX — 受 JEV 启发，基于 MLX 的本地语义决策" width="1280" />
 </p>
 
-<p align="center"><strong>当前状态 + 一句话 → 一个允许的选择。</strong><br />受 JEV 启发，为 Apple Silicon 构建。</p>
+<p align="center"><strong>当前状态 + 一句话 → 一个允许的选择。</strong><br />在 Apple Silicon 上进行本地大模型推理与语义路由。</p>
+
+**JEV MLX** 是面向 Apple Silicon Mac 的开源 Python 库，使用 [MLX](https://github.com/ml-explore/mlx) 和 [MLX-LM](https://github.com/ml-explore/mlx-lm) 进行本地大模型（local LLM）动作选择。它根据应用状态和自然语言请求，从应用允许的动作中选出一个，或返回 `no_match` / `abstain`。你可以通过 Python API、CLI 或本地 HTTP 服务接入语义路由（semantic routing）、enum / boolean 决策和自然语言应用控制。
 
 <p align="center">
   <img src="docs/assets/badges/apple-silicon.svg" alt="Apple Silicon" />
@@ -15,6 +19,7 @@
   <a href="#quick-start">快速开始</a> ·
   <a href="#blocks">游戏演示</a> ·
   <a href="#results">实测结果</a> ·
+  <a href="#faq">常见问题</a> ·
   <a href="docs/testing.zh-CN.md">怎么测试</a> ·
   <a href="#connect">联系</a>
 </p>
@@ -40,7 +45,7 @@
 
 第一轮在落下第一块前就被模型拒绝了，两次尝试都保留在[中文游戏报告](docs/blocks.zh-CN.md#recorded-development-attempts)。澄清游戏指令后，第二轮达到预设的 20 块上限，决策 p50 / p95 为 **5.78 / 11.57 秒**。这是开发演示，不是冻结的游戏基准或速度优势证明。手动模式可通过静态服务器运行；新的 AI 决策需要本地 MLX 后端。
 
-## 把自然语言接进你的应用
+## 基于 MLX 的动作选择与语义路由
 
 **JEV MLX** 根据当前应用状态、用户的话和动态候选动作，让本地模型选出一个稳定的业务 ID；没有合适选项时，可以返回“不匹配”或“需要澄清”。
 
@@ -67,7 +72,7 @@
 克隆仓库并安装：
 
 ```sh
-git clone https://github.com/CoderInPajamas/JEV-MLX.git
+git clone https://github.com/ItsOdeLeo/JEV-MLX.git
 cd JEV-MLX
 python3 -m venv .venv
 source .venv/bin/activate
@@ -187,6 +192,38 @@ Qwen 在原始集的 3 个未通过场景包括拒绝状态区分和排序后的
 候选映射为经过 tokenizer 验证的单 token 编码，再映射回业务 ID。直接评分读取因果模型的下一 token logits，不生成 JSON 续写；没有重写官方量化输出头。混合缓存只保留完整、可复用的前缀边界。
 
 实现细节见[架构](docs/architecture.zh-CN.md)与[官方框架审查](docs/framework-audit.zh-CN.md)。首版范围是**英文、单轮、单步选择**，不包含通用聊天、多步规划、任意参数生成、视觉理解、训练或 GPU 批处理。**中文文档不表示中文模型能力已经验证。**
+
+<a name="faq"></a>
+
+## 常见问题
+
+### JEV MLX 如何使用 MLX 和 MLX-LM？
+
+MLX 提供数组与计算框架，MLX-LM 加载并运行本地语言模型。JEV MLX 在此基础上提供应用定义的候选项、候选评分、拒绝结果和版本化执行。直接决策读取经过验证的单 token 选项编码对应的下一 token logits，不生成 JSON 续写。实现细节见[架构](docs/architecture.zh-CN.md)。
+
+### JEV MLX 可以用于本地语义路由吗？
+
+可以。把当前允许的路由或动作描述为带稳定业务 ID 的候选项，提供应用状态和用户请求，然后读取选中的 ID。动作由宿主应用定义和执行；不合适或含糊的请求可以返回 `no_match` 或 `abstain`。接入方法见 [Python API](docs/python-api.zh-CN.md)。
+
+### 已经评测了哪些 MLX 模型？
+
+已记录的本地检查点包括 Qwen3.5-9B-OptiQ-4bit、GLM-4.7-Flash-4bit 和 Gemma 4 26B-A4B MoE。三个模型都在新增 36 条测试中返回过错误动作；这些检查点的评测不表示兼容所有 MLX 模型。具体版本、结果和局限见[支持模型](docs/models.zh-CN.md)。
+
+### 推理需要云端 API 或重新训练模型吗？
+
+推理使用已有 MLX-LM 检查点，在 Apple Silicon Mac 上本地运行，不需要云端 API 或新模型训练。模型权重需要单独获取，再把本地目录传给引擎；软件包不负责下载权重。
+
+### 如何安装 JEV MLX？
+
+克隆 [ItsOdeLeo/JEV-MLX](https://github.com/ItsOdeLeo/JEV-MLX)，创建原生 ARM Python 3.11+ 环境，在仓库目录运行 `python -m pip install -e '.[mlx]'`，并将 `JEV_MLX_MODEL` 设为本地检查点目录。[快速开始](#quick-start)提供可运行示例。0.1 是实验版，尚未公开发布到 PyPI。
+
+### 本地 MLX 动作选择有多快？
+
+延迟取决于检查点、硬件、输入和可复用前缀。[实测结果](#results)区分了权重已加载且页面前缀可复用、启动、KV 冷和页面更新等情况。热缓存时间不是固定延迟保证，也不能证明无人监督执行的可靠性。
+
+### JEV MLX 是官方 JEV 实现或通用聊天助手吗？
+
+JEV MLX 是位于 [ItsOdeLeo/JEV-MLX](https://github.com/ItsOdeLeo/JEV-MLX) 的独立 JEV 启发项目。它使用已有 MLX-LM 模型，不使用 JEV 权重，也不复现未公开的 JEV 训练方法。0.1 支持英文、单轮、单步选择，通用聊天、视觉理解和多步规划不在范围内。
 
 ## 继续阅读
 

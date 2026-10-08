@@ -2,7 +2,7 @@
 
 [Back to home](../README.md)
 
-The project is **JEV MLX**, hosted at [CoderInPajamas/JEV-MLX](https://github.com/CoderInPajamas/JEV-MLX). The name makes the JEV inspiration and MLX runtime explicit. The distribution and CLI are `jev-mlx`; the Python import is `jev_mlx`.
+The project is **JEV MLX**, hosted at [ItsOdeLeo/JEV-MLX](https://github.com/ItsOdeLeo/JEV-MLX). The name makes the JEV inspiration and MLX runtime explicit. The distribution and CLI are `jev-mlx`; the Python import is `jev_mlx`.
 
 The public display name changed from MLXJ on 2026-09-20. Existing recordings and benchmark records retain their original names and bytes. This rename does not change the package, CLI, Python API, or measured model behavior.
 
