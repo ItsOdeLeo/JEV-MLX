@@ -19,6 +19,7 @@
   <a href="#quick-start">快速开始</a> ·
   <a href="#blocks">游戏演示</a> ·
   <a href="#results">实测结果</a> ·
+  <a href="#related-projects">相关项目</a> ·
   <a href="#faq">常见问题</a> ·
   <a href="docs/testing.zh-CN.md">怎么测试</a> ·
   <a href="#connect">联系</a>
@@ -193,6 +194,20 @@ Qwen 在原始集的 3 个未通过场景包括拒绝状态区分和排序后的
 
 实现细节见[架构](docs/architecture.zh-CN.md)与[官方框架审查](docs/framework-audit.zh-CN.md)。首版范围是**英文、单轮、单步选择**，不包含通用聊天、多步规划、任意参数生成、视觉理解、训练或 GPU 批处理。**中文文档不表示中文模型能力已经验证。**
 
+<a name="related-projects"></a>
+
+## 相关决策项目：OpenDecider 与 Laya
+
+正在评估 **OpenDecider**、**Laya** 或 **Laya-MLX** 的开发者，也可能需要本地动作选择、分类或语义路由。JEV MLX 使用已有的因果 MLX-LM 检查点和应用定义的候选项来处理这些场景。
+
+| 项目 | 文档中的实现方向 | 与 JEV MLX 的技术联系 |
+| :--- | :--- | :--- |
+| [OpenDecider](https://github.com/manjunathshiva/opendecider) | 提供带类型输出及服务客户端的开放权重 System 1 决策模型。 | 同类决策模型方案；JEV MLX 使用自己的请求和执行约定。 |
+| [Laya](https://github.com/NandhaKishorM/laya) · Convai Innovations | 基于编码器，回答选择、有序评分和是非问题。 | 相关的带类型决策方法；JEV MLX 从因果语言模型的选项 token logits 评分。 |
+| [Laya-MLX](https://github.com/mizorewww/laya-mlx) | 在 Apple Silicon 上运行 Laya 编码器和决策头的独立 MLX 实现。 | 共享 MLX 平台和本地决策场景，模型架构及 API 各自独立。 |
+
+[JEV MLX、OpenDecider 与 Laya 对照](docs/decision-models.zh-CN.md)列出了来源快照、集成边界与评测注意点。这些是相关项目，不代表已内置相应后端或存在厂商合作。
+
 <a name="faq"></a>
 
 ## 常见问题
@@ -204,6 +219,10 @@ MLX 提供数组与计算框架，MLX-LM 加载并运行本地语言模型。JEV
 ### JEV MLX 可以用于本地语义路由吗？
 
 可以。把当前允许的路由或动作描述为带稳定业务 ID 的候选项，提供应用状态和用户请求，然后读取选中的 ID。动作由宿主应用定义和执行；不合适或含糊的请求可以返回 `no_match` 或 `abstain`。接入方法见 [Python API](docs/python-api.zh-CN.md)。
+
+### JEV MLX 与 OpenDecider、Laya-MLX 有什么区别？
+
+它们面向相关的带类型决策场景。JEV MLX 为已有因果 MLX-LM 检查点增加有限候选动作选择；OpenDecider 提供自己的决策模型系列，Laya-MLX 运行 Laya 的编码器模型。各自的 API 和分数含义不同，JEV MLX 尚未进行三者之间的基准对比。详见[决策模型对照](docs/decision-models.zh-CN.md)。
 
 ### 已经评测了哪些 MLX 模型？
 
@@ -232,6 +251,7 @@ JEV MLX 是位于 [ItsOdeLeo/JEV-MLX](https://github.com/ItsOdeLeo/JEV-MLX) 的�
 | [中文测试说明](docs/testing.zh-CN.md) | 怎么测、测到了什么、失败在哪里、如何复现 |
 | [Python API](docs/python-api.zh-CN.md) | enum / boolean、返回字段、版本化执行 |
 | [支持模型](docs/models.zh-CN.md) | 检查点、量化、依赖、许可证与限制 |
+| [OpenDecider 与 Laya 对照](docs/decision-models.zh-CN.md) | 同类决策项目、MLX 运行时与集成边界 |
 | [评测方法](docs/evaluation.zh-CN.md) · [完整结果](docs/results.zh-CN.md) | 全部基线、原始记录、版本与失败 |
 | [本地 HTTP](docs/http-and-demo.zh-CN.md) | CLI、接口和真实浏览器操作 |
 | [贡献指南](CONTRIBUTING.zh-CN.md) · [发布说明](docs/releasing.zh-CN.md) | 开发、构建、发布边界 |

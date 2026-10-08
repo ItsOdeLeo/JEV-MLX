@@ -14,6 +14,7 @@ authors = [{name = "JEV MLX contributors"}]
 keywords = [
   "mlx", "mlx-lm", "apple-silicon", "llm", "local-llm",
   "local-inference", "action-selection", "semantic-routing", "jev",
+  "decision-model", "typed-decisions",
 ]
 classifiers = [
   "Development Status :: 3 - Alpha",

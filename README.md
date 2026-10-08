@@ -19,6 +19,7 @@
   <a href="#quick-start">Quick start</a> ·
   <a href="#blocks">Game demo</a> ·
   <a href="#results">Measured results</a> ·
+  <a href="#related-projects">Related projects</a> ·
   <a href="#faq">FAQ</a> ·
   <a href="docs/evaluation.md">Methodology</a> ·
   <a href="#connect">Connect & support</a>
@@ -193,6 +194,20 @@ Choices map to tokenizer-verified single-token codes, then back to business IDs.
 
 See the [architecture](docs/architecture.md) and [framework audit](docs/framework-audit.md). Version 0.1 focuses on **English, single-turn, single-step choices**. General chat, multi-step planning, arbitrary arguments, vision, training, and GPU batching are outside its scope. **Chinese documentation does not mean Chinese model behavior has been validated.**
 
+<a name="related-projects"></a>
+
+## Related decision projects: OpenDecider and Laya
+
+Developers evaluating **OpenDecider**, **Laya**, or **Laya-MLX** may also be looking for local action selection, classification, or semantic routing. JEV MLX addresses those use cases with existing causal MLX-LM checkpoints and application-defined choices.
+
+| Project | Documented approach | Relationship to JEV MLX |
+| :--- | :--- | :--- |
+| [OpenDecider](https://github.com/manjunathshiva/opendecider) | Open-weight System 1 decision models with typed outputs and serving clients. | Related decision-model alternative; JEV MLX uses its own request and execution contracts. |
+| [Laya](https://github.com/NandhaKishorM/laya) · Convai Innovations | Encoder-based models for choice, ordered score, and yes/no questions. | Related typed-decision approach; JEV MLX scores option-token logits from causal language models. |
+| [Laya-MLX](https://github.com/mizorewww/laya-mlx) | Independent MLX runtime for Laya's encoder and decision heads on Apple Silicon. | Shared MLX platform and local decision use case; separate model architecture and API. |
+
+Read the [JEV MLX, OpenDecider, and Laya comparison](docs/decision-models.md) for source snapshots, integration boundaries, and evaluation considerations. These are related projects, not bundled backends or vendor partnerships.
+
 <a name="faq"></a>
 
 ## Frequently asked questions
@@ -204,6 +219,10 @@ MLX provides the array and compute framework; MLX-LM loads and runs the local la
 ### Can I use JEV MLX as a local semantic router?
 
 Yes. Describe the currently allowed routes or actions as candidates with stable business IDs, supply the application state and user request, and inspect the selected ID. The host application defines and executes the actions. `no_match` and `abstain` handle unsuitable or ambiguous requests. See the [Python API](docs/python-api.md).
+
+### How does JEV MLX compare with OpenDecider and Laya-MLX?
+
+They share typed-decision use cases, but JEV MLX adds bounded action selection to existing causal MLX-LM checkpoints. OpenDecider provides its own decision-model families; Laya-MLX runs Laya's encoder-based models. Their APIs and score semantics differ, and JEV MLX has not benchmarked them against each other. See the [decision-model comparison](docs/decision-models.md).
 
 ### Which MLX models have been evaluated?
 
@@ -231,6 +250,7 @@ JEV MLX is an independent JEV-inspired project at [ItsOdeLeo/JEV-MLX](https://gi
 | :--- | :--- |
 | [Python API](docs/python-api.md) | Enum / boolean, result fields, and versioned execution |
 | [Model compatibility](docs/models.md) | Checkpoints, quantization, dependencies, licenses, and limits |
+| [OpenDecider and Laya comparison](docs/decision-models.md) | Related decision projects, MLX runtimes, and integration boundaries |
 | [Evaluation](docs/evaluation.md) · [Results](docs/results.md) | All baselines, raw evidence, versions, and failures |
 | [Testing guide](docs/testing.md) | Methodology, results, and reproduction |
 | [Local HTTP](docs/http-and-demo.md) | CLI, service, and actual browser operations |
